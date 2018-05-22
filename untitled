@@ -1,0 +1,474 @@
+
+
+
+#1、查询"01"课程比"02"课程成绩高的学生的信息及课程分数
+select aa.* from
+(
+select student.*,sc.score from student
+inner join sc on sc.snum=student.snum and sc.cnum='01'
+)aa,
+(
+select student.*,sc.score from student
+inner join sc on sc.snum=student.snum and sc.cnum='02'
+)bb where aa.snum=bb.snum and aa.score>bb.score;
+
+
+#1.1、查询同时存在"01"课程和"02"课程的情况
+select aa.*,bb.score num2sc from
+(
+select student.*,sc.score from student
+inner join sc on sc.snum=student.snum and sc.cnum='01'
+)aa,
+(
+select student.*,sc.score from student
+inner join sc on sc.snum=student.snum and sc.cnum='02'
+)bb where aa.snum=bb.snum
+
+
+
+#1.2、存在"01"课程但可能不存在"02"课程的情况(不存在时显示为null)(以下存在相同内容时不再解释)
+select a.*,b.score c1sc,c.score c2sc from student a 
+left join sc b on a.snum=b.snum and b.cnum='01'
+left join sc c on a.snum=c.snum and c.cnum='02' where b.score>ifnull(c.score,0)
+;
+
+
+
+#2、查询"01"课程比"02"课程成绩低的学生的信息及课程分数
+select a.*,b.score c1sc,c.score c2sc from student a 
+left join sc b on a.snum=b.snum and b.cnum='01'
+left join sc c on a.snum=c.snum and c.cnum='02'
+where b.score>c.score; 
+
+
+#2.1、查询同时存在"01"课程和"02"课程的情况
+select a.*,b.score sc1,c.score sc2 from student a
+inner join sc b on a.snum=b.snum and b.cnum='01'
+inner join sc c on a.snum=c.snum and c.cnum='02'
+
+
+#2.2、查询同时存在"01"课程和"02"课程的情况和不存在"01"课程但存在"02"课程的情况
+
+select a.*,b.score c1sc,c.score c2sc from student a 
+left join sc b on a.snum=b.snum and b.cnum='01'
+left join sc c on a.snum=c.snum and c.cnum='02'
+where ifnull(b.score,0)<c.score; 
+
+
+
+
+#3、查询平均成绩大于等于60分的同学的学生编号和学生姓名和平均成绩
+select student.snum,avg(sc.score) m_score from student
+,sc where student.snum=sc.snum  group by student.snum having m_score >60;
+
+// group by为什么不能用student.*
+
+
+#4、查询平均成绩小于60分的同学的学生编号和学生姓名和平均成绩
+
+select a.snum,a.sname,avg(b.score) m_scor from student a,sc b 
+where a.snum=b.snum group by a.snum,a.sname  having m_scor<60; 
+// group by 必须与字段对应？
+
+
+#4.1、查询在sc表存在成绩的学生信息的SQL语句。
+select a.snum,a.sname from student a
+right join sc b on a.snum=b.snum group by a.snum,a.sname;
+
+
+#4.2、查询在sc表中不存在成绩的学生信息的SQL语句。
+select a.snum,a.sname ,avg(sc.score) avg_sc from student a
+left join sc on a.snum=sc.snum group by a.snum,a.sname having ifnull(sc.score,0)=NULL;
+
+#5、查询所有同学的学生编号、学生姓名、选课总数、所有课程的总成绩
+select a.snum,a.sname,count(sc.cnum) sele_num,sum(sc.score) sumsc from student a 
+left join sc on sc.snum=a.snum group by a.snum,a.sname  
+
+
+#5.1、查询所有有成绩的SQL。
+select sc.snum,sc.score,a.sname,sc.cnum from sc 
+left join student a on a.snum=sc.snum;
+
+
+
+#5.2、查询所有(包括有成绩和无成绩)的SQL。
+select sc.snum,sc.score,a.sname,sc.cnum from sc 
+right join student a on a.snum=sc.snum;
+
+
+#6、查询"李"姓老师的数量 
+select count(a.tnum) from teacher a where a.tname like '李%';
+
+
+#7、查询学过"张三"老师授课的同学的信息 
+
+select e.* from sc c
+inner join
+(
+select a.tnum,b.tname,a.cnum from course a
+inner join teacher b on a.tnum=b.tnum and b.tname = '张三'
+)d on c.cnum = d.cnum,
+student e where e.snum=c.snum;
+
+
+#8、查询没学过"张三"老师授课的同学的信息 
+select * from student h where h.snum not in(
+select e.snum from sc c
+inner join
+(
+select a.tnum,b.tname,a.cnum from course a
+inner join teacher b on a.tnum=b.tnum and b.tname = '张三'
+)d on c.cnum = d.cnum,
+student e where e.snum=c.snum
+)
+
+
+
+#9、查询学过编号为"01"并且也学过编号为"02"的课程的同学的信息
+select student.*from student 
+inner join sc sc01 on sc01.snum=student.snum and sc01.cnum='02'
+inner join sc sc02 on sc02.snum=student.snum and sc02.cnum='01';
+
+
+
+#10、查询学过编号为"01"但是没有学过编号为"02"的课程的同学的信息
+select student.*from student 
+inner join sc sc01 on sc01.snum=student.snum and sc01.cnum='01'
+where student.snum not in
+(
+	
+select h.snum from student h
+inner join sc sc02 on sc02.snum=h.snum and sc02.cnum='02'
+)
+
+
+#11、查询没有学全所有课程的同学的信息
+select m.*from student m where m.snum not in
+(
+select h.snum from student h 
+inner join sc sc01 on sc01.snum=h.snum and sc01.cnum='01'
+inner join sc sc02 on sc02.snum=h.snum and sc02.cnum='02'
+inner join sc sc03 on sc03.snum=h.snum and sc03.cnum='03'
+);
+
+
+
+
+#12、查询至少有一门课与学号为"01"的同学所学相同的同学的信息 
+select c.snum from
+(
+select a.snum,b.cnum from student a
+inner join sc b on b.snum=a.snum and b.snum !='01'
+)c
+inner join
+(
+select e.cnum from student d
+inner join sc e on d.snum=e.snum and e.snum ='01'
+)f on c.cnum=f.cnum group by c.snum;
+
+
+
+
+
+
+#13、查询和"01"号的同学学习的课程完全相同的其他同学的信息 XX
+select student.* from
+(
+select a.snum from
+(
+select sc4.snum,count(sc4.cnum) c from sc sc4 group by sc4.snum having sc4.snum!='01' 
+)a
+inner join (
+select sc1.snum ,count(sc1.cnum) d from sc sc1,sc sc2 where sc1.cnum=sc2.cnum and sc2.snum='01' and sc1.snum!='01' group by sc1.snum having count(sc1.cnum)=(select count(sc3.cnum)from sc sc3 where sc3.snum='01')
+)b on a.snum=b.snum and a.c=b.d
+)e,student where student.snum=e.snum
+
+
+
+
+
+
+#14、查询没学过"张三"老师讲授的任一门课程的学生姓名 
+
+select *from student where student.snum not in
+( 
+select sc1.snum from sc sc1
+inner join
+(
+select course.cnum from teacher,course where course.tnum=teacher.tnum and teacher.tname='张三'
+)b where sc1.cnum=b.cnum
+);
+#15、查询两门及其以上不及格课程的同学的学号，姓名及其平均成绩 
+select sc1.snum,count(sc1.score) from sc sc1 where sc1.score<60  group by sc1.snum having count(sc1.score)>2;
+
+
+#16、检索"01"课程分数小于60，按分数降序排列的学生信息
+select student.*,sc.score from sc
+inner join student on student.snum=sc.snum and sc.cnum='01' order by sc.score desc;
+
+
+
+#17、按平均成绩从高到低显示所有学生的所有课程的成绩以及平均成绩
+select * from sc b
+inner join
+( 
+select a.snum,avg(sc1.score) h from student a
+inner join sc sc1 on sc1.snum=a.snum group by a.snum
+)c on b.snum=c.snum order by c.h desc;
+
+
+
+
+#18、查询各科成绩最高分、最低分和平均分：以如下形式显示：课程ID，课程name，最高分，最低分，平均分，及格率，中等率，优良率，优秀率
+#及格为>=60，中等为：70-80，优良为：80-90，优秀为：>=90
+select a.*,course.cname from course
+inner join
+(
+select sc1.cnum,avg(sc1.score) ave ,max(sc1.score) max,min(sc1.score) min from sc sc1 group by sc1.cnum 
+)a on a.cnum=course.cnum;
+
+
+#19、按各科成绩进行排序，并显示排名
+//todo
+
+select *,DENSE_RANK()over(order by score desc)m_r from SC  where sc.cnum='01'
+
+select *,DENSE_RANK()over(order by score desc)m_r from SC  where sc.cnum='02'
+
+select *,DENSE_RANK()over(order by score desc)m_r from SC  where sc.cnum='03'
+
+
+select*
+,(select count(*)+1 from sc scc where scc.cnum=sc.cnum and scc.score>sc.score  
+)g
+from sc order by sc.cnum ,g
+
+
+
+
+#20、查询学生的总成绩并进行排名
+
+select sc.snum,sum(sc.score) c,RANK()over(order by sum(sc.score) desc) b from sc group by sc.snum order by c desc  
+
+
+#20.1 查询学生的总成绩
+
+
+select sc.snum,sum(sc.score) c from sc
+
+
+#20.2 查询学生的总成绩并进行排名，分总分重复时保留名次空缺和不保留名次空缺两种。
+
+select sc.snum,sum(sc.score),RANK()over(order by sum(score) desc)排名 from SC group by sc.snum; //保留名次
+
+
+
+select sc.snum,sum(sc.score),DENSE_RANK()over(order by sum(score) desc)排名 from SC group by sc.snum; //合并名次
+
+
+#21、查询不同老师所教不同课程平均分从高到低显示 
+select *from 
+(
+select a.cnum,b.tname,b.tnum from course a,teacher b where a.tnum=b.tnum
+)aa,
+(
+select sc.cnum,avg(sc.score) from sc group by sc.cnum
+)bb where aa.cnum=bb.cnum
+
+
+#22、查询所有课程的成绩第2名到第3名的学生信息及该课程成绩
+select *from 
+(
+select*
+,(select count(*)+1 from sc scc where scc.cnum=sc.cnum and scc.score>sc.score
+)g
+from sc  order by sc.cnum ,g 
+)p where p.g<=3 and p.g >=2
+
+#23、查询学生平均成绩及其名次 
+
+select sc.snum,avg(sc.score),RANK()over(order by avg(sc.score) desc)b from sc  group by sc.snum order by b
+
+
+
+
+
+
+
+
+
+  
+#25、查询各科成绩前三名的记录
+	select *from 
+	(
+	select*
+	,(select count(*)+1 from sc scc where scc.cnum=sc.cnum and scc.score>sc.score
+	)g
+	from sc  order by sc.cnum ,g 
+	)p where p.g<=3 
+
+
+
+#25.1 分数重复时保留名次空缺
+
+select sc.*,DENSE_RANK()over(partition by sc.cnum order by sc.score desc)b from sc  
+
+
+
+#25.2 分数重复时不保留名次空缺，合并名次
+
+select sc.*,RANK()over(partition by sc.cnum order by sc.score desc)b from sc  
+
+
+#26、查询每门课程被选修的学生数 
+select sc.cnum,count(sc.cnum) from sc group by sc.cnum
+
+
+#27、查询出只有两门课程的全部学生的学号和姓名
+
+select sc.snum,count(sc.cnum) b from sc group by sc.snum having b=2 
+
+
+
+
+#28、查询男生、女生人数 
+
+select ssex,count(ssex) from student group by ssex
+
+
+
+
+
+#29、查询名字中含有"风"字的学生信息
+select *from student where sname like '%风'
+
+
+
+#30、查询同名同性学生名单，并统计同名人数 
+select a.*,b.*from student a,student b where a.sname=b.sname and a.snum!=b.snum
+
+
+
+ 
+#31、查询1990年出生的学生名单(注：Student表中Sage列的类型是datetime) 
+select *from student where sage like '1990%'
+
+
+
+
+#32、查询每门课程的平均成绩，结果按平均成绩降序排列，平均成绩相同时，按课程编号升序排列 
+select sc.cnum,avg(sc.score),rank()over(order by avg(sc.score) desc) from sc group by sc.cnum order by sc.cnum desc;
+
+
+
+#33、查询平均成绩大于等于85的所有学生的学号、姓名和平均成绩 
+select sc.snum,avg(sc.score),student.sname from student 
+inner join sc on sc.snum=student.snum
+group by student.snum,student.sname having avg(sc.score)>85
+
+
+
+
+
+
+#34、查询课程名称为"数学"，且分数低于60的学生姓名和分数 
+
+select a.snum,a.sname,b.score from student a,sc b where b.cnum=(
+select course.cnum from course where cname ='数学') and b.score <60 and a.snum=b.snum;
+
+
+
+
+#35、查询所有学生的课程及分数情况； 
+select *from sc;
+
+
+
+
+#36、查询任何一门课程成绩在70分以上的姓名、课程名称和分数； 
+select a.sname,b.cnum,b.score from student a,sc b where b.score >60 and b.snum=a.snum 
+
+
+
+
+
+#37、查询不及格的课程
+
+select a.sname,b.cnum,b.score from student a,sc b where b.score <60 and b.snum=a.snum 
+
+
+
+#38、查询课程编号为01且课程成绩在80分以上的学生的学号和姓名； 
+select a.snum,a.sname from student a,sc b where b.cnum='01' and b.score >80 and a.snum=b.snum
+
+
+#39、求每门课程的学生人数 
+select sc.cnum,count(sc.snum)from sc group by sc.cnum
+
+
+
+
+#40、查询选修"张三"老师所授课程的学生中，成绩最高的学生信息及其成绩
+
+select student.*,sc.score from sc,student where sc.snum=student.snum and sc.cnum=(
+select course.cnum from course ,teacher where teacher.tname ='张三' and course.tnum=teacher.tnum
+) order by sc.score desc limit 0,1;
+
+
+#41、查询不同课程成绩相同的学生的学生编号、课程编号、学生成绩 
+
+select sc1.snum,sc1.cnum c1,sc2.cnum c2,sc2.score from sc sc1,sc sc2 where sc1.snum =sc2.snum and sc1.cnum !=sc2.cnum and sc1.score=sc2.score
+
+#42、查询每门功成绩最好的前两名
+select *from 
+( 
+select sc.snum,sc.cnum,sc.score,rank()over(partition by sc.cnum order by sc.score desc)b from sc 
+)k where k.b<=2
+
+
+
+#43、统计每门课程的学生选修人数（超过5人的课程才统计）。要求输出课程号和选修人数，查询结果按人数降序排列，若人数相同，按课程号升序排列  
+select *from 
+(
+select sc.cnum,count(sc.snum) b from sc  group by sc.cnum having b>=5 order by  sc.cnum
+)k order by k.b
+
+
+
+#44、检索至少选修两门课程的学生学号 
+select sc.snum,count(sc.cnum) b  from sc  group by sc.snum having b>=2  
+
+
+
+
+
+#45、查询选修了全部课程的学生信息 
+select sc.snum,count(sc.cnum) b  from sc  group by sc.snum having b=(
+select count(course.cnum) from course)
+
+
+
+
+#46、查询各学生的年龄
+
+select a.*,'2018'-YEAR(a.sage) from student a
+
+
+#46.1 只按照年份来算
+
+
+select a.*,'2018'-YEAR(a.sage) from student a
+
+
+
+#46.2 按照出生日期来算，当前月日 < 出生年月的月日则，年龄减一
+
+#47、查询本周过生日的学生
+
+#48、查询下周过生日的学生
+
+#49、查询本月过生日的学生
+
+#50、查询下月过生日的学生
+
+
