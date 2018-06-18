@@ -77,6 +77,14 @@ cateName VARCHAR(50),
     
 cateDesc VARCHAR(200)
 
+PRIMARY KEY (cateName，cateDesc)，  
+                     /* 主码由两个属性构成，必须作为表级完整性进行定义*/
+FOREIGN KEY (cateName) REFERENCES Student(cateName)，
+                     /* 表级完整性约束条件，cateName是外码，被参照表是Student */
+FOREIGN KEY (cateDesc) REFERENCES Course(cateDesc)
+                     /* 表级完整性约束条件， cateDesc是外码，被参照表是Course*/
+
+
 )engine=MyISAM charset=utf8 AUTO_INCREATEMENT=100;从100开始自增长
 ALTER TABLE [table name] AUTO_INCREATEMENT=100;修改自增长的值
 
