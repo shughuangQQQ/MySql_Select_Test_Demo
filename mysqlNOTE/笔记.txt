@@ -1,9 +1,9 @@
 
 
-Êý¾Ý¿âÈý¸ö·¶Ê½
-1.ÊôÐÔ²»¿É²ð·Ö
-2.·ÇÖ÷¼ü¶Ô×éºÏÖ÷¼ü²¿·ÖÒÀÀµ²»ÔÊÐí
-3.²»ÔÊÐí´«µÝÒÀÀµ
+æ•°æ®åº“ä¸‰ä¸ªèŒƒå¼
+1.å±žæ€§ä¸å¯æ‹†åˆ†
+2.éžä¸»é”®å¯¹ç»„åˆä¸»é”®éƒ¨åˆ†ä¾èµ–ä¸å…è®¸
+3.ä¸å…è®¸ä¼ é€’ä¾èµ–
 
 
 
@@ -13,24 +13,24 @@ CREATE DATABASE;
 SHOW WARNINGS;
 SHOW DATABASES;
 SHOW CREATE DATABASE [databasename];
-ALTER DATABASE [databasename] DEFAULT CHARACTER SET [utf8/gbk];¸Ä±ä±àÂë
-USE [databasename];´ò¿ªÊý¾Ý¿â
-SELECT DATABASE();µÃµ½µ±Ç°´ò¿ªµÄÊý¾Ý¿âÃû
+ALTER DATABASE [databasename] DEFAULT CHARACTER SET [utf8/gbk];æ”¹å˜ç¼–ç 
+USE [databasename];æ‰“å¼€æ•°æ®åº“
+SELECT DATABASE();å¾—åˆ°å½“å‰æ‰“å¼€çš„æ•°æ®åº“å
 DROP DATABASE [databasename];
-SET NAMES GBK ÉèÖÃ¿Í»§¶ËºÍÁ´½Ó¶Ë ÁÙÊ±±àÂëGBK 
+SET NAMES GBK è®¾ç½®å®¢æˆ·ç«¯å’Œé“¾æŽ¥ç«¯ ä¸´æ—¶ç¼–ç GBK 
 
 
 
 
 
 
-´æ´¢ÒýÇæ
-show engines; ²é¿´ËùÓÐ´æ´¢ÒýÇæ
-show variables like 'have%'; ²é¿´Ö§³ÖµÄ´æ´¢ÒýÇæ
-show variables like 'storage_engine';²é¿´Ä¬ÈÏ´æ´¢ÒýÇæ
+å­˜å‚¨å¼•æ“Ž
+show engines; æŸ¥çœ‹æ‰€æœ‰å­˜å‚¨å¼•æ“Ž
+show variables like 'have%'; æŸ¥çœ‹æ”¯æŒçš„å­˜å‚¨å¼•æ“Ž
+show variables like 'storage_engine';æŸ¥çœ‹é»˜è®¤å­˜å‚¨å¼•æ“Ž
 
 
-´´½¨±í
+åˆ›å»ºè¡¨
 
 
 
@@ -45,28 +45,28 @@ cateDesc VARCHAR(200)
 
 )engine=MyISAM charset=utf8;
 
-²é¿´±í½á¹¹ 
+æŸ¥çœ‹è¡¨ç»“æž„ 
 DESC [table name];
 DESCRIBE [table name];
 show columns from[table name];
 
-Ïò±íÖÐ²åÈë¼ÇÂ¼ INSERT [table name] VALUES([value1],[2].......);
+å‘è¡¨ä¸­æ’å…¥è®°å½• INSERT [table name] VALUES([value1],[2].......);
 INSERT [table name]([table item],[table item ],...) VALUES ([],[],[]...)
-²éÑ¯±íÖÐËùÓÐ¼ÇÂ¼ select *from [table name];
+æŸ¥è¯¢è¡¨ä¸­æ‰€æœ‰è®°å½• select *from [table name];
 
 
 UNSIGNED 
 cateName TINYINT UNSIGNED 
-ÎÞ·ûºÅ
+æ— ç¬¦å·
 ZEROFILL
 cateName TINYINT ZEROFILL,
-»á×Ô¶¯¼ÓÉÏunsigned ²¢ÇÒ¶Ô³¤¶È²»×ã²¿·Ö²¹0
-Ö÷¼ü PRIMARY KEY £¨»òÕßKEY£©
-¶à×Ö¶ÎÖ÷¼ü£¨Ò»¸ö±íÖ»ÄÜÓÐÒ»¸öÖ÷¼ü£©
+ä¼šè‡ªåŠ¨åŠ ä¸Šunsigned å¹¶ä¸”å¯¹é•¿åº¦ä¸è¶³éƒ¨åˆ†è¡¥0
+ä¸»é”® PRIMARY KEY ï¼ˆæˆ–è€…KEYï¼‰
+å¤šå­—æ®µä¸»é”®ï¼ˆä¸€ä¸ªè¡¨åªèƒ½æœ‰ä¸€ä¸ªä¸»é”®ï¼‰
 PRIMARY KEY([id],[cardnum])
-AUTO_INCREATEMENT ×ÔÔö³¤ Ö»ÄÜ±êÖ¾Ö÷¼ü¡£
+AUTO_INCREATEMENT è‡ªå¢žé•¿ åªèƒ½æ ‡å¿—ä¸»é”®ã€‚
 INSERT [table name]([table item],...) VALUES([insert value],...);
-»òÕßINSERT [table name ] values £¨NULL,.....£©
+æˆ–è€…INSERT [table name ] values ï¼ˆNULL,.....ï¼‰
 
 CREATE TABLE IF NOT EXISTS cms_cate
 (
@@ -77,48 +77,51 @@ cateName VARCHAR(50),
     
 cateDesc VARCHAR(200)
 
-)engine=MyISAM charset=utf8 AUTO_INCREATEMENT=100;´Ó100¿ªÊ¼×ÔÔö³¤
-ALTER TABLE [table name] AUTO_INCREATEMENT=100;ÐÞ¸Ä×ÔÔö³¤µÄÖµ
+)engine=MyISAM charset=utf8 AUTO_INCREATEMENT=100;ä»Ž100å¼€å§‹è‡ªå¢žé•¿
+ALTER TABLE [table name] AUTO_INCREATEMENT=100;ä¿®æ”¹è‡ªå¢žé•¿çš„å€¼
 
-NOT NULL ·Ç¿ÕÔ¼Êø
-DEFAULT Ä¬ÈÏÖµ
+NOT NULL éžç©ºçº¦æŸ
+DEFAULT é»˜è®¤å€¼
 
-cateDesc VARCHAR(200£© DEFAULT ¡®Ä¬ÈÏÊý¾Ý',  
-INSERT [table name ] values £¨NULL,DEFAULT,.....£©
+cateDesc VARCHAR(200ï¼‰ DEFAULT â€˜é»˜è®¤æ•°æ®',  
+INSERT [table name ] values ï¼ˆNULL,DEFAULT,.....ï¼‰
 
 UNIQUE
-Î¨Ò» ±íÖÐÖ»ÄÜÓÐÒ»¸öÎ¨Ò»¡£²åÈë²»ÄÜÖØ¸´¡£NULL¿ÉÒÔÖØ¸´¡£
+å”¯ä¸€ è¡¨ä¸­åªèƒ½æœ‰ä¸€ä¸ªå”¯ä¸€ã€‚æ’å…¥ä¸èƒ½é‡å¤ã€‚NULLå¯ä»¥é‡å¤ã€‚
 
 
 
 
-²éÑ¯±íÖÐÌØ¶¨Êý¾Ý
+æŸ¥è¯¢è¡¨ä¸­ç‰¹å®šæ•°æ®
 select *from [table name] WHERE [table item]=[value];
 
-¸Ä±íÃû
+æ”¹è¡¨å
 AKTER TABLE [table name] RENAME [new name];
 RENAME [table name] TO [new name];
 
-Ìí¼Ó±íµÄ×Ö¶Î
+æ·»åŠ è¡¨çš„å­—æ®µ
 {
 ALTER TABLE [table name] 
-ADD [ºóÓëÉÏ¶¨Òå×Ö¶ÎÏàÍ¬¡£] [first],
-ADD [ºóÓëÉÏ¶¨Òå×Ö¶ÎÏàÍ¬¡£] [first],
+ADD [åŽä¸Žä¸Šå®šä¹‰å­—æ®µç›¸åŒã€‚] [first],
+ADD [åŽä¸Žä¸Šå®šä¹‰å­—æ®µç›¸åŒã€‚] [first],
 ....,
-ADD [ºóÓëÉÏ¶¨Òå×Ö¶ÎÏàÍ¬¡£] [first];
+ADD [åŽä¸Žä¸Šå®šä¹‰å­—æ®µç›¸åŒã€‚] [first];
 }
-ALTER TABLE [table name] ADD [ºóÓëÉÏ¶¨Òå×Ö¶ÎÏàÍ¬¡£] AFTER [Ä³×Ö¶Îºó];
+ALTER TABLE [table name] ADD [åŽä¸Žä¸Šå®šä¹‰å­—æ®µç›¸åŒã€‚] AFTER [æŸå­—æ®µåŽ];
 
-É¾³ýÄ³×Ö¶Î
-ALTER TABLE [table name] DROP [×Ö¶ÎÃû];
+åˆ é™¤æŸå­—æ®µ
+ALTER TABLE [table name] DROP [å­—æ®µå];
 {
 ALTER TABLE [table name] 
-DROP [×Ö¶ÎÃû],
-DROP [×Ö¶ÎÃû],
+DROP [å­—æ®µå],
+DROP [å­—æ®µå],
 
-DROP [×Ö¶ÎÃû],
+DROP [å­—æ®µå],
 ...,
-DROP [×Ö¶ÎÃû];
+DROP [å­—æ®µå];
 }
-Ìí¼ÓÉ¾³ý¿É»ìÐ´¡£
+æ·»åŠ åˆ é™¤å¯æ··å†™ã€‚
 
+
+
+update student set name='æŽé˜³' where id=2
