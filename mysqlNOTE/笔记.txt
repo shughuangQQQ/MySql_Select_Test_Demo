@@ -149,6 +149,14 @@ DROP INDEX [indexName] ON mytable;
 ALTER table mytable ADD UNIQUE [indexName] (username(length))
 如果是CHAR，VARCHAR类型，length可以小于字段实际长度；如果是BLOB和TEXT类型，必须指定 length。
 
+
+视图
+create view [viewname] as 
+seletct ....
+
+
+
+
 存储过程
 
 DROP PROCEDURE IF EXISTS [name];  
@@ -195,3 +203,10 @@ DELIMITER ;
 删除触发器：DROP TRIGGER [IF EXISTS] trigger_name
 查看触发器:SELECT * FROM TRIGGERS
 修改触发器只能删除，ALTER只能修改特性。
+
+
+
+
+grant insert,select,update/all/.,update(字段1,字段2,...).. on  [tablename1],[tablename2],[view].... to user  [with grant option]
+
+
