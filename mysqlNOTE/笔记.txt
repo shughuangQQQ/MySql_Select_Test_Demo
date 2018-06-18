@@ -149,6 +149,49 @@ DROP INDEX [indexName] ON mytable;
 ALTER table mytable ADD UNIQUE [indexName] (username(length))
 如果是CHAR，VARCHAR类型，length可以小于字段实际长度；如果是BLOB和TEXT类型，必须指定 length。
 
+存储过程
+
+DROP PROCEDURE IF EXISTS [name];  
+delimiter //
+create procedure if not exists [name] (OUT/IN/INOUT parmar INT/TINYINT/...  ,OUT/IN/INOUT parmar2 INT/TINYINT/...   , ...)
+ begin
+ mysql语句1;
+ mysql语句2;
+  ....
+ INSERT INTO stud_grade VALUES(@p1,@p2,@p3,@...)
+
+ end//
+ delimiter ;
+ 
+ 
+ call [name](@p1,@p2, ...);
+ 
+修改存储过程只能删除，ALTER只能修改特性。
+
+delimiter //
+触发器
+CREATE TRIGGER [name] [BEFORE/AFTER] [INSERT/UPDATE/DELETE] ON [tablename] FOR EACH ROW
+begin
+sql语句..
+...
+end//
+delimiter ;
 
 
 
+eg:
+
+
+DELIMITER $
+create trigger tri_stuInsert after insert
+on student for each row
+begin
+declare c int;
+set c = (select stuCount from class where classID=new.classID);
+update class set stuCount = c + 1 where classID = new.classID;
+end$
+DELIMITER ;
+
+删除触发器：DROP TRIGGER [IF EXISTS] trigger_name
+查看触发器:SELECT * FROM TRIGGERS
+修改触发器只能删除，ALTER只能修改特性。
