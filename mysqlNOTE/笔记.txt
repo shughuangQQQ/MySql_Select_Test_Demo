@@ -208,5 +208,5 @@ DELIMITER ;
 
 
 grant insert,select,update/all/.,update(字段1,字段2,...).. on  [tablename1],[tablename2],[view].... to user  [with grant option]
-
+revoke 与上同 将to 换成from
 
