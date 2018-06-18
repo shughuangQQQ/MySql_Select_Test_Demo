@@ -135,3 +135,20 @@ DROP [字段名];
 update student set name='李阳' where id=2
 DELETE FROM 表名 WHERE 字段1 = ‘’ and 字段2 = ‘’ and ...
 Delete 表名
+
+
+
+
+
+
+建立索引
+这是最基本的索引，它没有任何限制。它有以下几种创建方式：
+CREATE INDEX indexName ON mytable(username(length)); 
+CREATE [unique or CLUSTER]INDEX Stusname  ON Student(Sname);
+DROP INDEX [indexName] ON mytable; 
+ALTER table mytable ADD UNIQUE [indexName] (username(length))
+如果是CHAR，VARCHAR类型，length可以小于字段实际长度；如果是BLOB和TEXT类型，必须指定 length。
+
+
+
+
